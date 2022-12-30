@@ -60,7 +60,6 @@ const UserPage = () => {
 
 	//* Edit Event
 	const onClickEditButton = (user) => {
-		console.log(user);
 		delete user.password;
 		editForm.setFieldsValue(user);
 		setshowEditModal(true);
@@ -68,7 +67,13 @@ const UserPage = () => {
 
 	const onSaveEditModal = async () => {
 		setEditLoading(true);
-		await editUser(editForm.getFieldValue());
+		
+		try {
+			await editUser(editForm.getFieldValue());
+		} catch (error) {
+			console.log(error);
+		}
+		
 		await fetchUserData();
 		setEditLoading(false);
 		setshowEditModal(false);
@@ -88,7 +93,13 @@ const UserPage = () => {
 
 	const onSaveCreateModal = async () => {
 		setCreateLoading(true);
-		await createUser(createForm.getFieldValue());
+
+		try {
+			await createUser(createForm.getFieldValue());
+		} catch (error) {
+			console.log(error);
+		}
+
 		await fetchUserData();
 		setCreateLoading(false);
 		setshowCreateModal(false);
