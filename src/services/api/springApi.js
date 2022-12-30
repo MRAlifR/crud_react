@@ -9,7 +9,7 @@ const createUser = async (user) => {
 };
 
 const editUser = async (user) => {
-	await springApi.put(`/users/${user.userid}`, user);
+	await springApi.put('/users', user);
 };
 
 const deleteUser = async (user) => {
