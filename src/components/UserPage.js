@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Select, Space } from 'antd';
+import { Button, Form, Input, Modal, Select, Space, notification } from 'antd';
 import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import React, { useEffect, useState } from 'react';
@@ -13,15 +13,17 @@ import TableUser from './TableUser';
 
 const { confirm } = Modal;
 const UserPage = () => {
-	
 	//* Table
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(false);
+	
 	useEffect(() => {
 		fetchUserData();
 	}, []);
 
 	//* Modal
+	const [api, contextHolder] = notification.useNotification();
+
 	const [createForm] = Form.useForm();
 	const [showCreateModal, setshowCreateModal] = useState(false);
 	const [createLoading, setCreateLoading] = useState(false);
@@ -29,6 +31,14 @@ const UserPage = () => {
 	const [editForm] = Form.useForm();
 	const [showEditModal, setshowEditModal] = useState(false);
 	const [editLoading, setEditLoading] = useState(false);
+
+	const openErrorNotification = (message, description) => {
+		api.error({
+			message: message,
+			description: description,
+			placement: 'top',
+		});
+	};
 
 	const fetchUserData = async () => {
 		setLoading(true);
@@ -67,13 +77,13 @@ const UserPage = () => {
 
 	const onSaveEditModal = async () => {
 		setEditLoading(true);
-		
+
 		try {
 			await editUser(editForm.getFieldValue());
 		} catch (error) {
-			console.log(error);
+			openErrorNotification('Edit user error', error.message);
 		}
-		
+
 		await fetchUserData();
 		setEditLoading(false);
 		setshowEditModal(false);
@@ -97,7 +107,7 @@ const UserPage = () => {
 		try {
 			await createUser(createForm.getFieldValue());
 		} catch (error) {
-			console.log(error);
+			openErrorNotification('Create user error', error.message);
 		}
 
 		await fetchUserData();
@@ -117,6 +127,7 @@ const UserPage = () => {
 				background: '#F5F7FA',
 				height: '100vh',
 			}}>
+			{contextHolder}
 			<PageContainer title='React CRUD'>
 				<ProCard direction='column' ghost gutter={[0, 16]}>
 					<ProCard
