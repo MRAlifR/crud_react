@@ -1,12 +1,13 @@
-import { Button, Space, Table, Tag } from 'antd';
+import { Button, ConfigProvider, Empty, Space, Table, Tag } from 'antd';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 import React from 'react';
+
 const { Column } = Table;
 
 const TableUser = ({ users, loading, onClickEdit, onClickDelete }) => {
 	return (
-		<>
+		<ConfigProvider renderEmpty={() => <Empty description="Empty data"/>}>
 			<Table dataSource={users} rowKey='userid' loading={loading}>
 				<Column
 					title='Nama Lengkap'
@@ -49,7 +50,7 @@ const TableUser = ({ users, loading, onClickEdit, onClickDelete }) => {
 					}}
 				/>
 			</Table>
-		</>
+		</ConfigProvider>
 	);
 };
 
